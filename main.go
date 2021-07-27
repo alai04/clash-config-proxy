@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -39,7 +39,7 @@ func main() {
 			return
 		}
 
-		oriString, err := io.ReadAll(resp.Body)
+		oriString, err := ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
 		if err != nil {
 			ctx.String(http.StatusInternalServerError, "read response error")
