@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+clash-config-proxy
 
 # Test binary, built with `go test -c`
 *.test

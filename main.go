@@ -32,17 +32,9 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/cc", func(ctx *gin.Context) {
-		url := ctx.Query("url")
-		resp, err := http.Get(url)
-		if err != nil || resp.StatusCode != http.StatusOK {
-			ctx.String(http.StatusBadRequest, "url %s error")
-			return
-		}
-
-		oriString, err := ioutil.ReadAll(resp.Body)
-		resp.Body.Close()
+		oriString, err := getOrigin(ctx)
 		if err != nil {
-			ctx.String(http.StatusInternalServerError, "read response error")
+			ctx.String(http.StatusInternalServerError, "get url error")
 			return
 		}
 
@@ -53,5 +45,32 @@ func main() {
 		)
 		ctx.String(http.StatusOK, replacer.Replace(string(oriString)))
 	})
+
+	r.GET("/ori", func(ctx *gin.Context) {
+		oriString, err := getOrigin(ctx)
+		if err != nil {
+			ctx.String(http.StatusInternalServerError, "get url error")
+			return
+		}
+		ctx.String(http.StatusOK, string(oriString))
+	})
+
+	r.GET("/test", func(ctx *gin.Context) {
+		const testResponse = `Proxy: "This is a test"`
+		ctx.String(http.StatusOK, testResponse)
+	})
+
 	r.Run(port)
+}
+
+func getOrigin(ctx *gin.Context) (oriString []byte, err error) {
+	var resp *http.Response
+	url := ctx.Query("url")
+	resp, err = http.Get(url)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		return
+	}
+
+	defer resp.Body.Close()
+	return ioutil.ReadAll(resp.Body)
 }

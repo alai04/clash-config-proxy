@@ -1,0 +1,14 @@
+@host = http://192.168.1.6
+@port = 8080
+
+
+### /test
+GET {{host}}:{{port}}/test
+
+
+### origin config
+GET {{host}}:{{port}}/ori?url=http://localhost:{{port}}/test
+
+
+### replaced config
+GET {{host}}:{{port}}/cc?url=http://localhost:{{port}}/test
