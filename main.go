@@ -2,7 +2,9 @@ package main
 
 import (
 	"io/ioutil"
+	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 
@@ -65,8 +67,13 @@ func main() {
 
 func getOrigin(ctx *gin.Context) (oriString []byte, err error) {
 	var resp *http.Response
-	url := ctx.Query("url")
-	resp, err = http.Get(url)
+	var urlStr string
+	urlStr, err = url.QueryUnescape(ctx.Query("url"))
+	if err != nil {
+		return
+	}
+	log.Println("url:", urlStr)
+	resp, err = http.Get(urlStr)
 	if err != nil || resp.StatusCode != http.StatusOK {
 		return
 	}

@@ -1,4 +1,4 @@
-@host = http://192.168.1.6
+@host = http://192.168.1.2
 @port = 8080
 
 
@@ -7,7 +7,7 @@ GET {{host}}:{{port}}/test
 
 
 ### origin config
-GET {{host}}:{{port}}/ori?url=http://localhost:{{port}}/test
+GET {{host}}:{{port}}/ori?url=http://localhost:{{port}}/test%3Ftoken%3D09be964e627a69e62f53b8bc0c9c80a8%26flag%3Dclash
 
 
 ### replaced config
